@@ -1,0 +1,17 @@
+DesktopMatrix/
+├── Models/              # 数据模型
+│   ├── TaskItem.cs      # 任务项模型
+│   └── TaskData.cs      # 数据存储模型
+├── ViewModels/          # 视图模型
+│   ├── MainViewModel.cs # 主视图模型
+│   └── TaskViewModel.cs # 任务视图模型
+├── Views/               # 视图
+│   ├── MainWindow.xaml  # 主窗口
+│   └── TaskCard.xaml    # 任务卡片控件
+├── Services/            # 服务层
+│   ├── DataService.cs   # 数据服务
+│   ├── EncryptionService.cs # 加密服务
+│   └── TaskManager.cs   # 任务管理服务
+└── Utils/               # 工具类
+    ├── Constants.cs     # 常量定义
+    └── Extensions.cs    # 扩展方法

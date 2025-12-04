@@ -1,0 +1,9 @@
+<Application x:Class="DesktopMatrix.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DesktopMatrix"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <utils:EnumToCollectionConverter x:Key="EnumToCollectionConverter" xmlns:utils="clr-namespace:DesktopMatrix.Utils"/>
+    </Application.Resources>
+</Application>
