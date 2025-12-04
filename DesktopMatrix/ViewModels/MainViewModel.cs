@@ -109,14 +109,32 @@ namespace DesktopMatrix.ViewModels
             InitializeAsync().Wait();
 
             // 添加测试数据
-            _taskManager.AddTask("完成紧急报告", QuadrantType.Q1);
-            _taskManager.AddTask("处理客户投诉", QuadrantType.Q1);
-            _taskManager.AddTask("制定年度计划", QuadrantType.Q2);
-            _taskManager.AddTask("学习新技术", QuadrantType.Q2);
-            _taskManager.AddTask("回复邮件", QuadrantType.Q3);
-            _taskManager.AddTask("日常会议", QuadrantType.Q3);
-            _taskManager.AddTask("整理文档", QuadrantType.Q4);
-            _taskManager.AddTask("查看新闻", QuadrantType.Q4);
+            var task1 = _taskManager.AddTask("完成紧急报告", QuadrantType.Q1);
+            task1.Tags.AddRange(new[] { "工作", "紧急" });
+
+            var task2 = _taskManager.AddTask("处理客户投诉", QuadrantType.Q1);
+            task2.Tags.AddRange(new[] { "客户", "投诉" });
+
+            var task3 = _taskManager.AddTask("总结PPT完成", QuadrantType.Q1);
+            task3.Tags.AddRange(new[] { "总结", "PPT", "重要" });
+
+            var task4 = _taskManager.AddTask("制定年度计划", QuadrantType.Q2);
+            task4.Tags.AddRange(new[] { "规划", "年度" });
+
+            var task5 = _taskManager.AddTask("学习新技术", QuadrantType.Q2);
+            task5.Tags.AddRange(new[] { "学习", "技术" });
+
+            var task6 = _taskManager.AddTask("回复邮件", QuadrantType.Q3);
+            task6.Tags.AddRange(new[] { "邮件", "日常" });
+
+            var task7 = _taskManager.AddTask("日常会议", QuadrantType.Q3);
+            task7.Tags.AddRange(new[] { "会议", "常规" });
+
+            var task8 = _taskManager.AddTask("整理文档", QuadrantType.Q4);
+            task8.Tags.AddRange(new[] { "整理", "文档" });
+
+            var task9 = _taskManager.AddTask("查看新闻", QuadrantType.Q4);
+            task9.Tags.AddRange(new[] { "休闲", "新闻" });
         }
 
         /// <summary>

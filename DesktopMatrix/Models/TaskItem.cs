@@ -134,9 +134,15 @@ namespace DesktopMatrix.Models
                 {
                     _tags = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(HasTags));
                 }
             }
         }
+
+        /// <summary>
+        /// 是否有标签
+        /// </summary>
+        public bool HasTags => Tags != null && Tags.Count > 0;
 
         /// <summary>
         /// 构造函数

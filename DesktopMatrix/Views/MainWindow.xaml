@@ -12,9 +12,9 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        Topmost="True"
+        Topmost="False"
         WindowStartupLocation="CenterScreen"
-        ShowInTaskbar="False">
+        ShowInTaskbar="True">
 
     <Window.Resources>
         <!-- 毛玻璃效果 -->
@@ -145,8 +145,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="🔥 重要紧急" Style="{StaticResource QuadrantTitleStyle}"
-                                   Foreground="#D32F2F"/>
+                        <StackPanel Grid.Row="0" Orientation="Vertical">
+                            <TextBlock Text="🔥 重要紧急" Style="{StaticResource QuadrantTitleStyle}"
+                                       Foreground="#D32F2F"/>
+                            <TextBlock Text="立即处理的紧急任务" FontSize="10" Foreground="#666666"
+                                       HorizontalAlignment="Center" Margin="0,-2,0,3"/>
+                        </StackPanel>
 
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding Q1Tasks}">
@@ -174,8 +178,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="💡 重要不紧急" Style="{StaticResource QuadrantTitleStyle}"
-                                   Foreground="#1976D2"/>
+                        <StackPanel Grid.Row="0" Orientation="Vertical">
+                            <TextBlock Text="💡 重要不紧急" Style="{StaticResource QuadrantTitleStyle}"
+                                       Foreground="#1976D2"/>
+                            <TextBlock Text="长期规划的重要任务" FontSize="10" Foreground="#666666"
+                                       HorizontalAlignment="Center" Margin="0,-2,0,3"/>
+                        </StackPanel>
 
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding Q2Tasks}">
@@ -203,8 +211,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="⚡ 紧急不重要" Style="{StaticResource QuadrantTitleStyle}"
-                                   Foreground="#FF9800"/>
+                        <StackPanel Grid.Row="0" Orientation="Vertical">
+                            <TextBlock Text="⚡ 紧急不重要" Style="{StaticResource QuadrantTitleStyle}"
+                                       Foreground="#FF9800"/>
+                            <TextBlock Text="需要快速处理的琐事" FontSize="10" Foreground="#666666"
+                                       HorizontalAlignment="Center" Margin="0,-2,0,3"/>
+                        </StackPanel>
 
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding Q3Tasks}">
@@ -232,8 +244,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="🌱 不重要不紧急" Style="{StaticResource QuadrantTitleStyle}"
-                                   Foreground="#4CAF50"/>
+                        <StackPanel Grid.Row="0" Orientation="Vertical">
+                            <TextBlock Text="🌱 不重要不紧急" Style="{StaticResource QuadrantTitleStyle}"
+                                       Foreground="#4CAF50"/>
+                            <TextBlock Text="可以延后的休闲任务" FontSize="10" Foreground="#666666"
+                                       HorizontalAlignment="Center" Margin="0,-2,0,3"/>
+                        </StackPanel>
 
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding Q4Tasks}">

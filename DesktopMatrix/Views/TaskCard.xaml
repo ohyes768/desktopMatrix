@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:DesktopMatrix.Views"
              xmlns:utils="clr-namespace:DesktopMatrix.Utils"
              mc:Ignorable="d"
-             d:DesignHeight="50" d:DesignWidth="280"
-             MinHeight="40" MaxHeight="100">
+             d:DesignHeight="60" d:DesignWidth="280"
+             MinHeight="50" MaxHeight="120">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
@@ -19,40 +19,67 @@
       <Border x:Name="TaskCardBorder" BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="6"
             Background="#FAFFFFFF" Margin="1" Padding="6,4">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <!-- 完成状态复选框 -->
-            <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted, Mode=TwoWay}"
-                      VerticalAlignment="Center" Margin="0,0,6,0"
-                      ToolTip="标记完成"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- 任务标题 -->
-            <TextBlock Grid.Column="1" Text="{Binding Title}"
-                       FontWeight="Normal" TextWrapping="Wrap"
-                       FontSize="12" VerticalAlignment="Center"
-                       TextDecorations="{Binding IsCompleted, Converter={StaticResource BoolToStrikethroughConverter}}"
-                       Foreground="{Binding IsCompleted, Converter={StaticResource CompletedColorConverter}}"/>
+                <!-- 完成状态复选框 -->
+                <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+                          VerticalAlignment="Top" Margin="0,0,6,0"
+                          ToolTip="标记完成"/>
 
-            <!-- 象限标签 -->
-            <Border Grid.Column="2" Background="#F0F0F0" CornerRadius="3"
-                    Margin="4,0" Padding="3,1" VerticalAlignment="Center">
-                <TextBlock Text="{Binding Quadrant, Converter={StaticResource QuadrantDisplayConverter}}"
-                           FontSize="9" Foreground="#666666"/>
-            </Border>
+                <!-- 任务标题和标签容器 -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <!-- 任务标题 -->
+                    <TextBlock Text="{Binding Title}"
+                               FontWeight="Normal" TextWrapping="Wrap"
+                               FontSize="12"
+                               TextDecorations="{Binding IsCompleted, Converter={StaticResource BoolToStrikethroughConverter}}"
+                               Foreground="{Binding IsCompleted, Converter={StaticResource CompletedColorConverter}}"/>
+                </StackPanel>
 
-            <!-- 删除按钮 -->
-            <Button Grid.Column="3" Content="×" FontSize="12" FontWeight="Bold"
-                    Width="18" Height="18" Padding="0" Margin="3,0,0,0"
-                    Background="#FFE8E8" BorderThickness="0"
-                    Foreground="#D32F2F" VerticalAlignment="Center"
-                    ToolTip="删除任务"
-                    Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="{Binding Id}"/>
+                <!-- 象限标签 -->
+                <Border Grid.Column="2" Background="#F0F0F0" CornerRadius="3"
+                        Margin="4,0" Padding="3,1" VerticalAlignment="Top">
+                    <TextBlock Text="{Binding Quadrant, Converter={StaticResource QuadrantDisplayConverter}}"
+                               FontSize="9" Foreground="#666666"/>
+                </Border>
+
+                <!-- 删除按钮 -->
+                <Button Grid.Column="3" Content="×" FontSize="12" FontWeight="Bold"
+                        Width="18" Height="18" Padding="0" Margin="3,0,0,0"
+                        Background="#FFE8E8" BorderThickness="0"
+                        Foreground="#D32F2F" VerticalAlignment="Top"
+                        ToolTip="删除任务"
+                        Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding Id}"/>
+            </Grid>
+
+            <!-- 任务标签区域 -->
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Tags}" Margin="0,4,0,0"
+                          Visibility="{Binding HasTags, Converter={StaticResource BoolToVisConverter}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#E8F4FD" CornerRadius="10" Margin="0,0,4,2" Padding="4,1">
+                            <TextBlock Text="{Binding}" FontSize="9" Foreground="#1976D2"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Border>
 

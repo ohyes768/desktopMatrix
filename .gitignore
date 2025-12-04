@@ -68,12 +68,6 @@ coverage.json
 *.avi
 *.mkv
 
-# Project-specific files
-publish/
-*.ps1
-*.bat
-*.sh
-
 # Data files (don't commit user data)
 Data/
 *.json.bak

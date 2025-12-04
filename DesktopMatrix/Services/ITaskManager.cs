@@ -19,7 +19,7 @@ namespace DesktopMatrix.Services
         ObservableCollection<TaskItem> Q4Tasks { get; }
 
         Task InitializeAsync();
-        void AddTask(string title, QuadrantType quadrant);
+        TaskItem AddTask(string title, QuadrantType quadrant);
         bool MoveTask(Guid taskId, QuadrantType targetQuadrant);
         bool DeleteTask(Guid taskId);
         List<TaskItem> GetQuadrantTasks(QuadrantType quadrant);
@@ -150,23 +150,25 @@ namespace DesktopMatrix.Services
         /// <summary>
         /// 添加新任务
         /// </summary>
-        public void AddTask(string title, QuadrantType quadrant)
+        public TaskItem AddTask(string title, QuadrantType quadrant)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                return;
+                return null;
             }
 
             var task = new TaskItem(title, quadrant);
-            
+
             // 添加到内存集合
             AddTaskToCollection(task);
-            
+
             // 添加到数据模型
             _taskData.Tasks.Add(task);
-            
+
             // 标记有变更
             _hasChanges = true;
+
+            return task;
         }
 
         /// <summary>
