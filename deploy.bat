@@ -1,89 +1,68 @@
 @echo off
 chcp 65001 >nul
 echo ===================================
-echo DesktopMatrix 部署脚本
+echo DesktopWidget 快速部署脚本
 echo ===================================
 
 REM 设置工作目录
 cd /d "%~dp0"
-cd DesktopMatrix
 
-echo.
 echo 当前工作目录: %CD%
 echo.
 
-echo 1. 清理旧的构建文件...
-if exist "bin" rmdir /s /q "bin"
-if exist "obj" rmdir /s /q "obj"
-if exist "publish" rmdir /s /q "publish"
+echo 1. 清理旧版本...
+if exist "DesktopWidget\bin" rmdir /s /q "DesktopWidget\bin"
+if exist "DesktopWidget\obj" rmdir /s /q "DesktopWidget\obj"
 
 echo.
-echo 2. 恢复NuGet包...
-dotnet restore DesktopMatrix.csproj
+echo 2. 恢复依赖包...
+cd DesktopWidget
+dotnet restore
 if %errorlevel% neq 0 (
-    echo NuGet包恢复失败！
+    echo ❌ 包恢复失败！
     pause
     exit /b 1
 )
 
 echo.
 echo 3. 编译项目...
-dotnet build DesktopMatrix.csproj --configuration Release
+dotnet build --configuration Release
 if %errorlevel% neq 0 (
-    echo 项目编译失败！
+    echo ❌ 编译失败！
     pause
     exit /b 1
 )
 
 echo.
-echo 4. 发布单文件应用...
-dotnet publish DesktopMatrix.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o "./publish"
-if %errorlevel% neq 0 (
-    echo 应用发布失败！
-    pause
-    exit /b 1
-)
-
-echo.
-echo 5. 复制到桌面...
-set DESKTOP_DIR=%USERPROFILE%\Desktop\DesktopMatrix
+echo 4. 发布应用...
+set DESKTOP_DIR=%USERPROFILE%\Desktop\DesktopWidget
 if not exist "%DESKTOP_DIR%" mkdir "%DESKTOP_DIR%"
 
-if exist ".\publish\*" (
-    xcopy ".\publish\*" "%DESKTOP_DIR%\" /E /Y
-    echo 文件复制成功
-) else (
-    echo 发布目录为空，检查发布过程
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "%DESKTOP_DIR%"
+if %errorlevel% neq 0 (
+    echo ❌ 发布失败！
     pause
     exit /b 1
 )
 
 echo.
-echo 6. 创建快捷启动脚本...
-echo @echo off > "%DESKTOP_DIR%\启动.bat"
-echo cd /d "%%~dp0" >> "%DESKTOP_DIR%\启动.bat"
-echo echo 正在启动 DesktopMatrix... >> "%DESKTOP_DIR%\启动.bat"
-echo start "" "DesktopMatrix.exe" >> "%DESKTOP_DIR%\启动.bat"
-
-echo.
-echo 7. 检查发布结果...
-if exist "%DESKTOP_DIR%\DesktopMatrix.exe" (
-    echo ✅ DesktopMatrix.exe 创建成功
-) else (
-    echo ❌ DesktopMatrix.exe 创建失败
-    dir "%DESKTOP_DIR%"
-    pause
-    exit /b 1
-)
+echo 5. 清理不必要的文件...
+cd /d "%DESKTOP_DIR%"
+if exist "*.pdb" del /q "*.pdb"
+if exist "*.xml" del /q "*.xml"
 
 echo.
 echo ===================================
-echo 部署完成！
-echo 应用已发布到桌面: %DESKTOP_DIR%
-echo 双击 "启动.bat" 运行应用
+echo ✅ 部署完成！
+echo 安装位置: %DESKTOP_DIR%
+echo 主程序: %DESKTOP_DIR%\DesktopWidget.exe
 echo ===================================
-
 echo.
-echo 按任意键启动应用，或关闭窗口退出...
+echo 快捷键：
+echo   Ctrl+Shift+D  - 显示/隐藏窗口
+echo   Ctrl+Shift+A  - 快速添加任务
+echo.
+
+echo 按任意键启动应用...
 pause >nul
-start "" "%DESKTOP_DIR%\DesktopMatrix.exe"
+start "" "DesktopWidget.exe"

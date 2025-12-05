@@ -6,11 +6,12 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -18,10 +19,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Utils\*.cs" />
+    <Compile Include="*.cs" />
     <Compile Include="Models\*.cs" />
-    <Compile Include="ViewModels\*.cs" />
     <Compile Include="Services\*.cs" />
+    <Compile Include="Controls\*.cs" />
+    <Compile Include="Utils\*.cs" />
   </ItemGroup>
 
 </Project>
