@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 using DesktopWidget.Models;
 using DesktopWidget.Services;
 using System.Windows.Threading;
@@ -59,6 +61,9 @@ namespace DesktopWidget
                 .GetValue(_taskManager) as DesktopWidget.Services.DatabaseService;
 
             DataContext = this;
+
+            // 初始化象限选择按钮状态
+            UpdateQuadrantButtonStyles();
 
             // 初始化自动保存定时器
             _autoSaveTimer = new DispatcherTimer
@@ -173,9 +178,78 @@ namespace DesktopWidget
             this.Hide();
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void CleanupButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("设置功能开发中...", "Desktop Widget", MessageBoxButton.OK, MessageBoxImage.Information);
+            LogMessage("开始清理已完成的任务");
+
+            var completedTasks = new List<TaskItem>();
+
+            // 收集所有已完成的任务
+            completedTasks.AddRange(_taskManager.Q1Tasks.Where(t => t.IsCompleted));
+            completedTasks.AddRange(_taskManager.Q2Tasks.Where(t => t.IsCompleted));
+            completedTasks.AddRange(_taskManager.Q3Tasks.Where(t => t.IsCompleted));
+            completedTasks.AddRange(_taskManager.Q4Tasks.Where(t => t.IsCompleted));
+
+            LogMessage($"找到 {completedTasks.Count} 个已完成的任务");
+
+            if (completedTasks.Count == 0)
+            {
+                System.Windows.MessageBox.Show("没有已完成的任务需要清理。", "清理完成", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // 确认对话框
+            var result = System.Windows.MessageBox.Show(
+                $"确定要删除 {completedTasks.Count} 个已完成的任务吗？\n\n此操作无法撤销。",
+                "确认清理",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                int deletedCount = 0;
+
+                foreach (var task in completedTasks)
+                {
+                    try
+                    {
+                        LogMessage($"删除任务: ID={task.Id}, 标题='{task.Title}', 象限={task.Quadrant}");
+
+                        // 从数据库删除
+                        _taskManager.DeleteTask(task.Id);
+
+                        // 从界面集合中删除
+                        switch (task.Quadrant)
+                        {
+                            case QuadrantType.Q1:
+                                _taskManager.Q1Tasks.Remove(task);
+                                break;
+                            case QuadrantType.Q2:
+                                _taskManager.Q2Tasks.Remove(task);
+                                break;
+                            case QuadrantType.Q3:
+                                _taskManager.Q3Tasks.Remove(task);
+                                break;
+                            case QuadrantType.Q4:
+                                _taskManager.Q4Tasks.Remove(task);
+                                break;
+                        }
+
+                        deletedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMessage($"删除任务失败: ID={task.Id}, 错误={ex.Message}");
+                    }
+                }
+
+                LogMessage($"清理完成，成功删除 {deletedCount} 个任务");
+                System.Windows.MessageBox.Show($"成功清理了 {deletedCount} 个已完成的任务！", "清理完成", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                LogMessage("用户取消了清理操作");
+            }
         }
 
         #region 任务管理
@@ -302,17 +376,20 @@ namespace DesktopWidget
         private void SelectQuadrantButton_Click(object sender, RoutedEventArgs e)
         {
             var clickedButton = sender as System.Windows.Controls.Button;
-            var content = clickedButton.Content.ToString();
 
-            // 更新选中的象限
-            _selectedQuadrant = content switch
+            LogMessage($"点击了按钮: {clickedButton.Name}, 内容: {clickedButton.Content}");
+
+            // 根据按钮名称直接判断象限，而不是依赖文本内容
+            _selectedQuadrant = clickedButton.Name switch
             {
-                "Q1 重要紧急" => QuadrantType.Q1,
-                "Q2 重要不紧急" => QuadrantType.Q2,
-                "Q3 紧急不重要" => QuadrantType.Q3,
-                "Q4 不重要不紧急" => QuadrantType.Q4,
+                "Q1Button" => QuadrantType.Q1,
+                "Q2Button" => QuadrantType.Q2,
+                "Q3Button" => QuadrantType.Q3,
+                "Q4Button" => QuadrantType.Q4,
                 _ => QuadrantType.Q1
             };
+
+            LogMessage($"选中象限更新为: {_selectedQuadrant}");
 
             // 更新按钮样式状态
             UpdateQuadrantButtonStyles();
@@ -320,28 +397,158 @@ namespace DesktopWidget
 
         private void UpdateQuadrantButtonStyles()
         {
-            // 重置所有按钮为默认样式
-            Q1Button.Style = (Style)FindResource("QuadrantButtonStyle");
-            Q2Button.Style = (Style)FindResource("QuadrantButtonStyle");
-            Q3Button.Style = (Style)FindResource("QuadrantButtonStyle");
-            Q4Button.Style = (Style)FindResource("QuadrantButtonStyle");
+            LogMessage($"更新按钮样式，当前选中象限: {_selectedQuadrant}");
 
-            // 设置选中的按钮为选中样式
+            // 重置所有按钮为默认状态
+            ResetButtonStyle(Q1Button);
+            ResetButtonStyle(Q2Button);
+            ResetButtonStyle(Q3Button);
+            ResetButtonStyle(Q4Button);
+
+            // 设置选中的按钮为高亮状态
             switch (_selectedQuadrant)
             {
                 case QuadrantType.Q1:
-                    Q1Button.Style = (Style)FindResource("QuadrantButtonSelectedStyle");
+                    LogMessage("高亮 Q1 按钮");
+                    HighlightButton(Q1Button);
                     break;
                 case QuadrantType.Q2:
-                    Q2Button.Style = (Style)FindResource("QuadrantButtonSelectedStyle");
+                    LogMessage("高亮 Q2 按钮");
+                    HighlightButton(Q2Button);
                     break;
                 case QuadrantType.Q3:
-                    Q3Button.Style = (Style)FindResource("QuadrantButtonSelectedStyle");
+                    LogMessage("高亮 Q3 按钮");
+                    HighlightButton(Q3Button);
                     break;
                 case QuadrantType.Q4:
-                    Q4Button.Style = (Style)FindResource("QuadrantButtonSelectedStyle");
+                    LogMessage("高亮 Q4 按钮");
+                    HighlightButton(Q4Button);
                     break;
             }
+        }
+
+        private void ResetButtonStyle(System.Windows.Controls.Button button)
+        {
+            // 获取对应的 Border
+            Border parentBorder = null;
+            switch (button.Name)
+            {
+                case "Q1Button":
+                    parentBorder = Q1Border;
+                    break;
+                case "Q2Button":
+                    parentBorder = Q2Border;
+                    break;
+                case "Q3Button":
+                    parentBorder = Q3Border;
+                    break;
+                case "Q4Button":
+                    parentBorder = Q4Border;
+                    break;
+            }
+
+            if (parentBorder != null)
+            {
+                // 恢复原始背景色
+                switch (button.Name)
+                {
+                    case "Q1Button":
+                        parentBorder.Background = FindResource("Q1ButtonBrush") as SolidColorBrush;
+                        break;
+                    case "Q2Button":
+                        parentBorder.Background = FindResource("Q2ButtonBrush") as SolidColorBrush;
+                        break;
+                    case "Q3Button":
+                        parentBorder.Background = FindResource("Q3ButtonBrush") as SolidColorBrush;
+                        break;
+                    case "Q4Button":
+                        parentBorder.Background = FindResource("Q4ButtonBrush") as SolidColorBrush;
+                        break;
+                }
+
+                // 恢复未选中状态的边框
+                parentBorder.BorderBrush = FindResource("UnselectedBorderBrush") as SolidColorBrush;
+                parentBorder.BorderThickness = new Thickness(2);
+
+                // 清除效果和变换
+                parentBorder.Effect = null;
+                parentBorder.RenderTransform = null;
+            }
+
+            // 恢复按钮样式
+            button.FontWeight = FontWeights.Medium;
+            button.Effect = null;
+            button.RenderTransform = null;
+        }
+
+        private void HighlightButton(System.Windows.Controls.Button button)
+        {
+            // 获取对应的 Border
+            Border parentBorder = null;
+            switch (button.Name)
+            {
+                case "Q1Button":
+                    parentBorder = Q1Border;
+                    break;
+                case "Q2Button":
+                    parentBorder = Q2Border;
+                    break;
+                case "Q3Button":
+                    parentBorder = Q3Border;
+                    break;
+                case "Q4Button":
+                    parentBorder = Q4Border;
+                    break;
+            }
+
+            if (parentBorder != null)
+            {
+                // 设置高亮背景色
+                switch (button.Name)
+                {
+                    case "Q1Button":
+                        parentBorder.Background = FindResource("Q1HighlightBrush") as SolidColorBrush;
+                        break;
+                    case "Q2Button":
+                        parentBorder.Background = FindResource("Q2HighlightBrush") as SolidColorBrush;
+                        break;
+                    case "Q3Button":
+                        parentBorder.Background = FindResource("Q3HighlightBrush") as SolidColorBrush;
+                        break;
+                    case "Q4Button":
+                        parentBorder.Background = FindResource("Q4HighlightBrush") as SolidColorBrush;
+                        break;
+                }
+
+                // 设置选中状态的白色边框
+                parentBorder.BorderBrush = FindResource("SelectedBorderBrush") as SolidColorBrush;
+                parentBorder.BorderThickness = new Thickness(3);
+
+                // 添加强烈的阴影效果
+                parentBorder.Effect = new DropShadowEffect
+                {
+                    Color = System.Windows.Media.Color.FromRgb(0, 0, 0),
+                    BlurRadius = 15,
+                    ShadowDepth = 3,
+                    Opacity = 0.6
+                };
+
+                // 添加明显的缩放效果
+                parentBorder.RenderTransform = new ScaleTransform(1.15, 1.15);
+                parentBorder.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
+
+                // 添加按钮内部的发光效果
+                button.Effect = new DropShadowEffect
+                {
+                    Color = System.Windows.Media.Color.FromRgb(255, 255, 255),
+                    BlurRadius = 8,
+                    ShadowDepth = 0,
+                    Opacity = 0.6
+                };
+            }
+
+            // 加粗按钮文字
+            button.FontWeight = FontWeights.Bold;
         }
 
         private async void ConfirmAddTask_Click(object sender, RoutedEventArgs e)

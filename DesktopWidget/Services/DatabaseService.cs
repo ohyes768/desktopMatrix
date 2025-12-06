@@ -280,6 +280,33 @@ namespace DesktopWidget.Services
             });
         }
 
+        // 同步版本
+        public bool DeleteTaskSync(int id)
+        {
+            MainWindow.LogStatic($"DatabaseService.DeleteTaskSync 开始 - ID: {id}");
+
+            try
+            {
+                using var connection = new SqliteConnection(_connectionString);
+                connection.Open();
+                MainWindow.LogStatic("打开数据库连接");
+
+                var query = "DELETE FROM Tasks WHERE Id = @Id";
+                using var command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
+
+                var result = command.ExecuteNonQuery();
+                MainWindow.LogStatic($"DELETE影响行数: {result}");
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                MainWindow.LogStatic($"DeleteTaskSync 异常: {ex.Message}");
+                throw;
+            }
+        }
+
         private TaskItem MapReaderToTaskItem(SqliteDataReader reader)
         {
             var task = new TaskItem

@@ -168,6 +168,53 @@ namespace DesktopWidget.Services
             return success;
         }
 
+        // 同步版本，用于UI操作
+        public bool DeleteTask(int taskId)
+        {
+            MainWindow.LogStatic($"TaskManager.DeleteTask 开始 - 任务ID: {taskId}");
+
+            bool success = false;
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                var task = FindTaskById(taskId);
+                if (task == null)
+                {
+                    MainWindow.LogStatic($"DeleteTask 失败: 找不到任务ID {taskId}");
+                    return;
+                }
+
+                try
+                {
+                    // 同步删除数据库
+                    success = _dbService.DeleteTaskSync(taskId);
+                    MainWindow.LogStatic($"数据库删除结果: {success}");
+
+                    if (success)
+                    {
+                        // 从界面集合中删除
+                        RemoveTaskFromQuadrant(task);
+                        MainWindow.LogStatic("任务从界面集合中删除成功");
+                        // 触发任务变更事件
+                        TriggerTaskChanged(TaskChangedEventArgs.Deleted(task));
+                        MainWindow.LogStatic("触发任务删除事件");
+                    }
+                    else
+                    {
+                        MainWindow.LogStatic("数据库删除失败");
+                        success = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MainWindow.LogStatic($"DeleteTask 异常: {ex.Message}");
+                    MainWindow.LogStatic($"DeleteTask 堆栈: {ex.StackTrace}");
+                    success = false;
+                }
+            });
+
+            return success;
+        }
+
         public async Task<bool> MoveTaskToQuadrantAsync(int taskId, QuadrantType targetQuadrant)
         {
             var task = FindTaskById(taskId);

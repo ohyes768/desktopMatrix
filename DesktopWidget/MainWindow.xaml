@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Desktop Widget" Height="350" Width="280"
+        Title="Desktop Widget" Height="380" Width="280"
         WindowStyle="None"
         Topmost="True"
         ResizeMode="CanResizeWithGrip"
@@ -17,11 +17,27 @@
         MouseLeftButtonDown="TitleBar_MouseDown">
 
     <Window.Resources>
-        <!-- 象限颜色 -->
-        <SolidColorBrush x:Key="Q1Brush" Color="#FFEBEE"/>
-        <SolidColorBrush x:Key="Q2Brush" Color="#E3F2FD"/>
-        <SolidColorBrush x:Key="Q3Brush" Color="#FFF3E0"/>
-        <SolidColorBrush x:Key="Q4Brush" Color="#E8F5E9"/>
+        <!-- 象限颜色 - 淡色版本（主界面使用） -->
+        <SolidColorBrush x:Key="Q1Brush" Color="#60FFEBEE"/>
+        <SolidColorBrush x:Key="Q2Brush" Color="#60E3F2FD"/>
+        <SolidColorBrush x:Key="Q3Brush" Color="#60FFF3E0"/>
+        <SolidColorBrush x:Key="Q4Brush" Color="#60E8F5E9"/>
+
+        <!-- 象限选择器颜色 - 深色版本（按钮使用） -->
+        <SolidColorBrush x:Key="Q1ButtonBrush" Color="#E53935"/>
+        <SolidColorBrush x:Key="Q2ButtonBrush" Color="#1976D2"/>
+        <SolidColorBrush x:Key="Q3ButtonBrush" Color="#FB8C00"/>
+        <SolidColorBrush x:Key="Q4ButtonBrush" Color="#43A047"/>
+
+        <!-- 象限选择器高亮颜色 -->
+        <SolidColorBrush x:Key="Q1HighlightBrush" Color="#B71C1C"/>
+        <SolidColorBrush x:Key="Q2HighlightBrush" Color="#0A3D91"/>
+        <SolidColorBrush x:Key="Q3HighlightBrush" Color="#E65100"/>
+        <SolidColorBrush x:Key="Q4HighlightBrush" Color="#1B5E20"/>
+
+        <!-- 选中状态边框颜色 -->
+        <SolidColorBrush x:Key="SelectedBorderBrush" Color="White"/>
+        <SolidColorBrush x:Key="UnselectedBorderBrush" Color="#20000000"/>
 
         <!-- 标题栏样式 -->
         <Style x:Key="TitleBarStyle" TargetType="Border">
@@ -45,14 +61,14 @@
 
         <!-- 任务卡片样式 -->
         <Style x:Key="TaskCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#D0FFFFFF"/>
             <Setter Property="CornerRadius" Value="3"/>
             <Setter Property="Margin" Value="0,1"/>
             <Setter Property="Padding" Value="3"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="Black" BlurRadius="2" ShadowDepth="1" Opacity="0.2"/>
+                    <DropShadowEffect Color="Black" BlurRadius="2" ShadowDepth="1" Opacity="0.3"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -81,29 +97,13 @@
         </Style>
 
         <!-- 象限选择按钮选中状态样式 -->
-        <Style x:Key="QuadrantButtonSelectedStyle" TargetType="Button">
-            <Setter Property="FontSize" Value="9"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="White"/>
+        <Style x:Key="QuadrantButtonSelectedStyle" TargetType="Button" BasedOn="{StaticResource QuadrantButtonStyle}">
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="BorderBrush" Value="#2C3E50"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="White" BlurRadius="4" ShadowDepth="0" Opacity="0.8"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                    </ControlTemplate>
+                    <DropShadowEffect Color="#2C3E50" BlurRadius="6" ShadowDepth="2" Opacity="0.6"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -122,7 +122,7 @@
         </Style>
     </Window.Resources>
 
-    <Border Background="#F0FFFFFF" CornerRadius="8" BorderBrush="#D0D0D0" BorderThickness="1">
+    <Border Background="#B0FFFFFF" CornerRadius="8" BorderBrush="#90909090" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -211,7 +211,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="140"/>
                         <RowDefinition Height="140"/>
-                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="80"/>
                     </Grid.RowDefinitions>
 
                     <!-- Q2: 重要不紧急 -->
@@ -263,11 +263,13 @@
 
                         <Button Grid.Column="0" Content="添加"
                                 Style="{StaticResource QuickButtonStyle}"
+                                Margin="0,0,4,0"
                                 Click="AddTaskCommand_Executed"/>
 
-                        <Button Grid.Column="1" Content="设置"
+                        <Button Grid.Column="1" Content="清理"
                                 Style="{StaticResource QuickButtonStyle}"
-                                Click="SettingsButton_Click"/>
+                                Margin="4,0,0,0"
+                                Click="CleanupButton_Click"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -280,7 +282,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border Background="White" CornerRadius="8" Margin="20" BorderBrush="#D0D0D0" BorderThickness="1">
+                <Border Background="#E0FFFFFF" CornerRadius="8" Margin="20" BorderBrush="#A0A0A0A0" BorderThickness="1">
                     <Grid Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -314,22 +316,42 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Button x:Name="Q1Button" Grid.Column="0" Grid.Row="0" Content="Q1 重要紧急"
-                                        Background="{StaticResource Q1Brush}" Margin="0,0,2,2"
-                                        Style="{StaticResource QuadrantButtonStyle}"
+                                <Border x:Name="Q1Border" Grid.Column="0" Grid.Row="0" CornerRadius="8" Margin="0,0,2,2"
+                                    Background="{StaticResource Q1ButtonBrush}" BorderThickness="2"
+                                    BorderBrush="{StaticResource UnselectedBorderBrush}">
+                                <Button x:Name="Q1Button" Content="重要紧急"
+                                        Background="Transparent" BorderThickness="0"
+                                        Padding="10,8" FontSize="11" Foreground="White"
+                                        FontWeight="Medium" Cursor="Hand"
                                         Click="SelectQuadrantButton_Click"/>
-                                <Button x:Name="Q2Button" Grid.Column="1" Grid.Row="0" Content="Q2 重要不紧急"
-                                        Background="{StaticResource Q2Brush}" Margin="0,0,0,2"
-                                        Style="{StaticResource QuadrantButtonStyle}"
+                            </Border>
+                            <Border x:Name="Q2Border" Grid.Column="1" Grid.Row="0" CornerRadius="8" Margin="0,0,0,2"
+                                    Background="{StaticResource Q2ButtonBrush}" BorderThickness="2"
+                                    BorderBrush="{StaticResource UnselectedBorderBrush}">
+                                <Button x:Name="Q2Button" Content="重要不紧急"
+                                        Background="Transparent" BorderThickness="0"
+                                        Padding="10,8" FontSize="11" Foreground="White"
+                                        FontWeight="Medium" Cursor="Hand"
                                         Click="SelectQuadrantButton_Click"/>
-                                <Button x:Name="Q3Button" Grid.Column="0" Grid.Row="1" Content="Q3 紧急不重要"
-                                        Background="{StaticResource Q3Brush}" Margin="0,2,2,0"
-                                        Style="{StaticResource QuadrantButtonStyle}"
+                            </Border>
+                            <Border x:Name="Q3Border" Grid.Column="0" Grid.Row="1" CornerRadius="8" Margin="0,2,2,0"
+                                    Background="{StaticResource Q3ButtonBrush}" BorderThickness="2"
+                                    BorderBrush="{StaticResource UnselectedBorderBrush}">
+                                <Button x:Name="Q3Button" Content="紧急不重要"
+                                        Background="Transparent" BorderThickness="0"
+                                        Padding="10,8" FontSize="11" Foreground="White"
+                                        FontWeight="Medium" Cursor="Hand"
                                         Click="SelectQuadrantButton_Click"/>
-                                <Button x:Name="Q4Button" Grid.Column="1" Grid.Row="1" Content="Q4 不重要不紧急"
-                                        Background="{StaticResource Q4Brush}" Margin="0,2,0,0"
-                                        Style="{StaticResource QuadrantButtonStyle}"
+                            </Border>
+                            <Border x:Name="Q4Border" Grid.Column="1" Grid.Row="1" CornerRadius="8" Margin="0,2,0,0"
+                                    Background="{StaticResource Q4ButtonBrush}" BorderThickness="2"
+                                    BorderBrush="{StaticResource UnselectedBorderBrush}">
+                                <Button x:Name="Q4Button" Content="不重要不紧急"
+                                        Background="Transparent" BorderThickness="0"
+                                        Padding="10,8" FontSize="11" Foreground="White"
+                                        FontWeight="Medium" Cursor="Hand"
                                         Click="SelectQuadrantButton_Click"/>
+                            </Border>
                             </Grid>
                         </StackPanel>
 
