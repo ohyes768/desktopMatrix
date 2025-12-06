@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Desktop Widget" Height="380" Width="280"
+        Title="TaskMatrix - 任务矩阵" Height="380" Width="280"
         WindowStyle="None"
         Topmost="True"
         ResizeMode="CanResizeWithGrip"
@@ -138,7 +138,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- 标题文字 -->
-                    <TextBlock Grid.Column="0" Text="Desktop Widget"
+                    <TextBlock Grid.Column="0" Text="TaskMatrix"
                                Foreground="White" FontWeight="Bold"
                                VerticalAlignment="Center" Margin="10,0,0,0"
                                FontSize="12"/>

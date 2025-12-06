@@ -16,7 +16,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <ApplicationIcon>..\quadrant_icon.ico</ApplicationIcon>
+    <ApplicationIcon>..\taskmatrix_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="..\quadrant_icon.ico" />
+    <Resource Include="..\taskmatrix_icon.ico" />
   </ItemGroup>
 
 </Project>

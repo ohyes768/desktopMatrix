@@ -28,18 +28,19 @@ namespace DesktopWidget.Services
             {
                 // Try multiple possible paths for the icon file
                 string[] possiblePaths = {
-                    // First try the specialized tray icon
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tray_icon.ico"),
+                    // First try the TaskMatrix tray icon
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "taskmatrix_tray.ico"),
+                    // Fallback to app icon if tray icon not available
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "taskmatrix_icon.ico"),
                     // Absolute path to project root
-                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "tray_icon.ico")),
-                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "quadrant_icon.ico")),
+                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "taskmatrix_tray.ico")),
+                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "taskmatrix_icon.ico")),
                     // Relative paths from executable location
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quadrant_icon.ico"),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "quadrant_icon.ico"),
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "quadrant_icon.ico"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "taskmatrix_tray.ico"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "taskmatrix_tray.ico"),
                     // Embedded resource approach
-                    "pack://application:,,,/tray_icon.ico",
-                    "pack://application:,,,/quadrant_icon.ico"
+                    "pack://application:,,,/taskmatrix_tray.ico",
+                    "pack://application:,,,/taskmatrix_icon.ico"
                 };
 
                 Console.WriteLine($"Current base directory: {AppDomain.CurrentDomain.BaseDirectory}");
@@ -100,7 +101,7 @@ namespace DesktopWidget.Services
             _notifyIcon = new NotifyIcon
             {
                 Icon = customIcon ?? SystemIcons.Application,
-                Text = "Desktop Widget - 四象限任务管理",
+                Text = "TaskMatrix - 任务矩阵管理",
                 Visible = true
             };
 

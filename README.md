@@ -1,10 +1,12 @@
-# DesktopMatrix - 桌面四象限任务管理器
+# TaskMatrix - 任务矩阵管理器
 
 一个基于WPF开发的现代化桌面小组件应用，采用经典的时间管理四象限方法帮助您高效管理任务。
 
-![DesktopMatrix](https://img.shields.io/badge/.NET-9.0-blue.svg)
+![TaskMatrix](https://img.shields.io/badge/.NET-9.0-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+![应用预览](./taskmatrix_icon_48.png)
 
 ## 🎯 功能特点
 
@@ -14,6 +16,7 @@
 - **可拖拽移动** - 通过顶部标题栏自由拖拽位置
 - **紧凑布局** - 280x350小巧尺寸，不占用桌面空间
 - **系统托盘集成** - 最小化到托盘，不影响工作
+- **自定义图标** - 专属TaskMatrix矩阵图标，提升品牌识别度
 
 ### 📋 四象限任务管理
 - **🔥 重要紧急** (第一象限) - 立即处理的关键任务
@@ -48,7 +51,7 @@
 
 ### 项目结构
 ```
-desktopMatrix/
+taskmatrix/
 ├── 📁 DesktopWidget/               # 主应用程序目录
 │   ├── 📁 Models/                  # 数据模型层
 │   │   ├── TaskItem.cs             # 任务实体模型
@@ -69,6 +72,11 @@ desktopMatrix/
 │   ├── 📄 SimpleTest.cs            # 简单测试类
 │   └── 📄 DesktopWidget.csproj     # 项目配置文件
 │
+├── 🎨 taskmatrix_icon.ico          # 应用图标 (48x48, 32x32, 16x16)
+├── 🎨 taskmatrix_tray.ico          # 系统托盘图标 (16x16优化)
+├── 🎨 taskmatrix_icon.svg          # 矢量图标源文件 (如需要)
+├── 🖼️ taskmatrix_icon_48.png        # 48x48预览图标
+├── 🖼️ taskmatrix_tray_16.png        # 16x16托盘图标预览
 ├── 🚀 deploy.bat                   # Windows部署脚本
 └── 📄 查看日志说明.md               # 日志查看说明文档
 ```
@@ -79,6 +87,7 @@ desktopMatrix/
 - **Microsoft.Data.Sqlite 9.0.0** - 轻量级数据库存储，兼容单文件发布
 - **Microsoft.Xaml.Behaviors.Wpf 1.1.135** - WPF行为库，支持交互功能
 - **Windows Forms** - 系统托盘支持
+- **PIL (Python Imaging Library)** - 图标生成工具
 - **架构模式** - 清晰的分层架构 (Models/Services/Controls/Utils)
 
 ## 🚀 快速开始
@@ -87,13 +96,14 @@ desktopMatrix/
 - **.NET 9.0 SDK** 或更高版本
 - **Windows 10/11** 操作系统
 - **Visual Studio 2022** 或 **VS Code** (推荐)
+- **Python 3.x** 和 **Pillow** (用于自定义图标开发，可选)
 
 ### 安装步骤
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/your-username/desktopMatrix.git
-   cd desktopMatrix
+   git clone https://github.com/your-username/taskmatrix.git
+   cd taskmatrix
    ```
 
 2. **快速测试运行**
@@ -198,6 +208,38 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 <Window Height="350" Width="280"     <!-- 调整这些值 -->
         MinHeight="280" MinWidth="240">   <!-- 最小尺寸限制 -->
 ```
+
+### 自定义应用图标
+
+如需自定义应用图标，请按以下步骤：
+
+1. **准备图标文件**
+   ```bash
+   # 安装Pillow (如需重新生成图标)
+   pip install Pillow
+   ```
+
+2. **替换图标文件**
+   - `taskmatrix_icon.ico` - 应用程序图标 (48x48, 32x32, 16x16)
+   - `taskmatrix_tray.ico` - 系统托盘图标 (16x16优化)
+   - `taskmatrix_icon.svg` - 矢量图标源文件 (如需要)
+
+3. **更新项目配置**
+   - 修改 `DesktopWidget.csproj` 中的 `<ApplicationIcon>` 路径
+   - 图标会自动加载到系统托盘和应用程序
+
+### 图标设计说明
+
+- **taskmatrix_icon.ico**: 蓝色主题矩阵设计，专业科技感
+  - 🔵 左上：重要紧急 (Steel Blue)
+  - 🔵 右上：重要不紧急 (Cornflower Blue)
+  - 🟠 左下：紧急不重要 (Dark Orange)
+  - 🟠 右下：不重要不紧急 (Orange)
+  - 中心标识："TM" 代表 TaskMatrix
+
+- **taskmatrix_tray.ico**: 16x16像素优化版本，适合系统托盘显示
+  - 简化的2x2网格设计
+  - 保持颜色主题一致性
 
 ## 🐛 故障排除
 
