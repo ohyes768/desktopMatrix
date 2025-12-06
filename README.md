@@ -1,8 +1,8 @@
-# DesktopWidget - 桌面四象限任务管理器
+# DesktopMatrix - 桌面四象限任务管理器
 
 一个基于WPF开发的现代化桌面小组件应用，采用经典的时间管理四象限方法帮助您高效管理任务。
 
-![DesktopWidget](https://img.shields.io/badge/.NET-9.0-blue.svg)
+![DesktopMatrix](https://img.shields.io/badge/.NET-9.0-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
@@ -48,30 +48,38 @@
 
 ### 项目结构
 ```
-DesktopWidget/
-├── 📁 Models/                      # 数据模型层
-│   └── TaskItem.cs                 # 任务实体模型
+desktopMatrix/
+├── 📁 DesktopWidget/               # 主应用程序目录
+│   ├── 📁 Models/                  # 数据模型层
+│   │   ├── TaskItem.cs             # 任务实体模型
+│   │   └── QuadrantType.cs         # 象限类型枚举
+│   │
+│   ├── 📁 Services/                # 业务服务层
+│   │   ├── DatabaseService.cs      # 数据库服务
+│   │   ├── TaskManager.cs          # 任务管理器
+│   │   ├── TrayService.cs          # 系统托盘服务
+│   │   └── HotkeyService.cs        # 快捷键服务
+│   │
+│   ├── 📁 Controls/                # 自定义控件（预留）
+│   ├── 📁 Utils/                   # 工具类（预留）
+│   ├── 📄 MainWindow.xaml          # 主窗口界面
+│   ├── 📄 MainWindow.xaml.cs       # 主窗口逻辑
+│   ├── 📄 App.xaml                 # 应用程序入口
+│   ├── 📄 App.xaml.cs              # 应用程序逻辑
+│   ├── 📄 SimpleTest.cs            # 简单测试类
+│   └── 📄 DesktopWidget.csproj     # 项目配置文件
 │
-├── 📁 Services/                    # 业务服务层
-│   ├── DatabaseService.cs          # 数据库服务
-│   ├── TaskManager.cs              # 任务管理器
-│   ├── TrayService.cs              # 系统托盘服务
-│   └── HotkeyService.cs            # 快捷键服务
-│
-├── 📄 MainWindow.xaml              # 主窗口界面
-├── 📄 MainWindow.xaml.cs           # 主窗口逻辑
-├── 📄 App.xaml                     # 应用程序入口
-├── 📄 App.xaml.cs                  # 应用程序逻辑
-├── 📄 DesktopWidget.csproj         # 项目配置文件
-└── 🚀 deploy_widget.bat            # Windows部署脚本
+├── 🚀 deploy.bat                   # Windows部署脚本
+└── 📄 查看日志说明.md               # 日志查看说明文档
 ```
 
 ### 核心技术栈
 - **.NET 9.0** - 最新的.NET开发平台
 - **WPF (Windows Presentation Foundation)** - Windows桌面应用框架
-- **Microsoft.Data.Sqlite** - 轻量级数据库存储，兼容单文件发布
-- **MVVM (Model-View-ViewModel)** - 清晰的架构模式
+- **Microsoft.Data.Sqlite 9.0.0** - 轻量级数据库存储，兼容单文件发布
+- **Microsoft.Xaml.Behaviors.Wpf 1.1.135** - WPF行为库，支持交互功能
 - **Windows Forms** - 系统托盘支持
+- **架构模式** - 清晰的分层架构 (Models/Services/Controls/Utils)
 
 ## 🚀 快速开始
 
@@ -97,7 +105,7 @@ DesktopWidget/
 3. **完整部署到桌面**
    ```bash
    # Windows - 双击运行或在命令行执行
-   deploy_widget.bat
+   deploy.bat
    ```
 
 ## 📦 部署方式
@@ -107,7 +115,7 @@ DesktopWidget/
 **Windows用户：**
 ```bash
 # 双击运行或在命令行执行
-deploy_widget.bat
+deploy.bat
 ```
 
 部署脚本会自动：
@@ -116,7 +124,8 @@ deploy_widget.bat
 3. 编译项目为Release版本
 4. 发布为单文件可执行程序
 5. 复制到用户桌面 (`%USERPROFILE%\Desktop\DesktopWidget\`)
-6. 创建启动脚本
+6. 清理不必要的文件（.pdb, .xml）
+7. 自动启动应用程序
 
 ### 方式二：手动编译部署
 
@@ -221,9 +230,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 ```
 Desktop\
 └── DesktopWidget\
-    ├── DesktopWidget.exe          # 主程序
-    ├── DesktopWidget.pdb          # 调试信息
-    ├── 启动.bat                   # 快速启动脚本
+    ├── DesktopWidget.exe          # 主程序（单文件发布）
     └── [其他运行时文件]
 ```
 
