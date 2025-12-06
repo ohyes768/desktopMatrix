@@ -16,6 +16,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ApplicationIcon>..\quadrant_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,10 @@
     <Compile Include="Services\*.cs" />
     <Compile Include="Controls\*.cs" />
     <Compile Include="Utils\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\quadrant_icon.ico" />
   </ItemGroup>
 
 </Project>

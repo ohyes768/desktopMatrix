@@ -1,0 +1,28 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="48" height="48" fill="#f0f0f0" rx="6"/>
+
+  <!-- Four quadrants with different colors -->
+  <!-- Important & Urgent (Top-Left) -->
+  <rect x="3" y="3" width="20" height="20" fill="#FF6B6B" rx="2"/>
+  <text x="13" y="17" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">!</text>
+
+  <!-- Important & Not Urgent (Top-Right) -->
+  <rect x="25" y="3" width="20" height="20" fill="#4ECDC4" rx="2"/>
+  <text x="35" y="17" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">★</text>
+
+  <!-- Not Important & Urgent (Bottom-Left) -->
+  <rect x="3" y="25" width="20" height="20" fill="#FFE66D" rx="2"/>
+  <text x="13" y="39" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#333">⟳</text>
+
+  <!-- Not Important & Not Urgent (Bottom-Right) -->
+  <rect x="25" y="25" width="20" height="20" fill="#95E1D3" rx="2"/>
+  <text x="35" y="39" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#333">⏰</text>
+
+  <!-- Grid lines -->
+  <line x1="24" y1="3" x2="24" y2="45" stroke="white" stroke-width="1"/>
+  <line x1="3" y1="24" x2="45" y2="24" stroke="white" stroke-width="1"/>
+
+  <!-- Border -->
+  <rect width="48" height="48" fill="none" stroke="#ddd" stroke-width="1" rx="6"/>
+</svg>

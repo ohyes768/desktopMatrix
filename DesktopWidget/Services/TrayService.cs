@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows;
+using System.IO;
 
 namespace DesktopWidget.Services
 {
@@ -21,9 +22,84 @@ namespace DesktopWidget.Services
 
         private void InitializeTrayIcon()
         {
+            // Try to load custom icon, fallback to system icon if not available
+            Icon customIcon = null;
+            try
+            {
+                // Try multiple possible paths for the icon file
+                string[] possiblePaths = {
+                    // First try the specialized tray icon
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tray_icon.ico"),
+                    // Absolute path to project root
+                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "tray_icon.ico")),
+                    Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "quadrant_icon.ico")),
+                    // Relative paths from executable location
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quadrant_icon.ico"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "quadrant_icon.ico"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "quadrant_icon.ico"),
+                    // Embedded resource approach
+                    "pack://application:,,,/tray_icon.ico",
+                    "pack://application:,,,/quadrant_icon.ico"
+                };
+
+                Console.WriteLine($"Current base directory: {AppDomain.CurrentDomain.BaseDirectory}");
+
+                foreach (string iconPath in possiblePaths)
+                {
+                    if (iconPath.StartsWith("pack://"))
+                    {
+                        // Try to load from embedded resource
+                        try
+                        {
+                            var stream = System.Windows.Application.GetResourceStream(new Uri(iconPath))?.Stream;
+                            if (stream != null)
+                            {
+                                customIcon = new Icon(stream);
+                                Console.WriteLine($"Successfully loaded embedded icon");
+                                break;
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine($"Failed to load embedded resource: {iconPath}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Checking icon path: {iconPath}, Exists: {File.Exists(iconPath)}");
+                        if (File.Exists(iconPath))
+                        {
+                            // Create icon with proper size for system tray (16x16 or 32x32)
+                            using (var originalIcon = new Icon(iconPath))
+                            {
+                                // Create a new icon with the desired size
+                                customIcon = new Icon(iconPath, new System.Drawing.Size(16, 16));
+                                Console.WriteLine($"Successfully loaded icon from: {iconPath}, Size: {originalIcon.Width}x{originalIcon.Height}");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (customIcon != null)
+                {
+                    Console.WriteLine("Custom icon loaded successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to load custom icon, using system icon");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error if needed, or silently fallback to system icon
+                System.Diagnostics.Debug.WriteLine($"Failed to load custom icon: {ex.Message}");
+                Console.WriteLine($"Failed to load custom icon: {ex.Message}");
+            }
+
             _notifyIcon = new NotifyIcon
             {
-                Icon = SystemIcons.Application,
+                Icon = customIcon ?? SystemIcons.Application,
                 Text = "Desktop Widget - 四象限任务管理",
                 Visible = true
             };
