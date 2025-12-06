@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace DesktopWidget.Models
+namespace TaskMatrixApp.Models
 {
     public class TaskItem : INotifyPropertyChanged
     {
@@ -17,7 +17,7 @@ namespace DesktopWidget.Models
         private int _priority;
 
         // 添加静态数据库服务引用，用于自动保存
-        public static DesktopWidget.Services.DatabaseService _dbService;
+        public static TaskMatrixApp.Services.DatabaseService _dbService;
 
         public int Id
         {

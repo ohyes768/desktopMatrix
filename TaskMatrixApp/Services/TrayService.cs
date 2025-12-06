@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Windows;
 using System.IO;
 
-namespace DesktopWidget.Services
+namespace TaskMatrixApp.Services
 {
     public class TrayService : IDisposable
     {

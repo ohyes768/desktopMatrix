@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace DesktopWidget
+namespace TaskMatrixApp
 {
     /// <summary>
     /// App.xaml 的交互逻辑

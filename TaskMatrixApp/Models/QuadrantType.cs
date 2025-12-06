@@ -1,4 +1,4 @@
-namespace DesktopWidget.Models
+namespace TaskMatrixApp.Models
 {
     public enum QuadrantType
     {

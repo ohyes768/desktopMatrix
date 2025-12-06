@@ -5,14 +5,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using DesktopWidget.Models;
-using DesktopWidget.Services;
+using TaskMatrixApp.Models;
+using TaskMatrixApp.Services;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.IO;
 
-namespace DesktopWidget
+namespace TaskMatrixApp
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
@@ -58,7 +58,7 @@ namespace DesktopWidget
             // 设置TaskItem的数据库服务引用，用于自动保存
             TaskItem._dbService = _taskManager.GetType()
                 .GetField("_dbService", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(_taskManager) as DesktopWidget.Services.DatabaseService;
+                .GetValue(_taskManager) as TaskMatrixApp.Services.DatabaseService;
 
             DataContext = this;
 

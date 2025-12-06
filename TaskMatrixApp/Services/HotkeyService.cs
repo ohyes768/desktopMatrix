@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace DesktopWidget.Services
+namespace TaskMatrixApp.Services
 {
     public class HotkeyService : IDisposable
     {

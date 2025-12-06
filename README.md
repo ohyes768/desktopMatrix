@@ -52,7 +52,7 @@
 ### 项目结构
 ```
 taskmatrix/
-├── 📁 DesktopWidget/               # 主应用程序目录
+├── 📁 TaskMatrixApp/               # 主应用程序目录
 │   ├── 📁 Models/                  # 数据模型层
 │   │   ├── TaskItem.cs             # 任务实体模型
 │   │   └── QuadrantType.cs         # 象限类型枚举
@@ -70,7 +70,7 @@ taskmatrix/
 │   ├── 📄 App.xaml                 # 应用程序入口
 │   ├── 📄 App.xaml.cs              # 应用程序逻辑
 │   ├── 📄 SimpleTest.cs            # 简单测试类
-│   └── 📄 DesktopWidget.csproj     # 项目配置文件
+│   └── 📄 TaskMatrixApp.csproj     # 项目配置文件
 │
 ├── 🎨 taskmatrix_icon.ico          # 应用图标 (48x48, 32x32, 16x16)
 ├── 🎨 taskmatrix_tray.ico          # 系统托盘图标 (16x16优化)
@@ -108,8 +108,8 @@ taskmatrix/
 
 2. **快速测试运行**
    ```bash
-   cd DesktopWidget
-   dotnet run --project DesktopWidget.csproj
+   cd TaskMatrixApp
+   dotnet run --project TaskMatrixApp.csproj
    ```
 
 3. **完整部署到桌面**
@@ -133,7 +133,7 @@ deploy.bat
 2. 恢复NuGet包依赖
 3. 编译项目为Release版本
 4. 发布为单文件可执行程序
-5. 复制到用户桌面 (`%USERPROFILE%\Desktop\DesktopWidget\`)
+5. 复制到用户桌面 (`%USERPROFILE%\Desktop\TaskMatrix\`)
 6. 清理不必要的文件（.pdb, .xml）
 7. 自动启动应用程序
 
@@ -141,7 +141,7 @@ deploy.bat
 
 ```bash
 # 1. 清理项目
-cd DesktopWidget
+cd TaskMatrixApp
 dotnet clean
 
 # 2. 恢复依赖
@@ -154,7 +154,7 @@ dotnet build --configuration Release
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "./publish"
 
 # 5. 运行应用
-./publish/DesktopWidget.exe
+./publish/TaskMatrix.exe
 ```
 
 ## 💡 使用指南
@@ -225,7 +225,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
    - `taskmatrix_icon.svg` - 矢量图标源文件 (如需要)
 
 3. **更新项目配置**
-   - 修改 `DesktopWidget.csproj` 中的 `<ApplicationIcon>` 路径
+   - 修改 `TaskMatrixApp.csproj` 中的 `<ApplicationIcon>` 路径
    - 图标会自动加载到系统托盘和应用程序
 
 ### 图标设计说明
@@ -271,8 +271,8 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 
 ```
 Desktop\
-└── DesktopWidget\
-    ├── DesktopWidget.exe          # 主程序（单文件发布）
+└── TaskMatrix\
+    ├── TaskMatrix.exe             # 主程序（单文件发布）
     └── [其他运行时文件]
 ```
 

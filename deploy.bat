@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 echo ===================================
-echo DesktopWidget 快速部署脚本
+echo TaskMatrix 快速部署脚本
 echo ===================================
 
 REM 设置工作目录
@@ -11,12 +11,12 @@ echo 当前工作目录: %CD%
 echo.
 
 echo 1. 清理旧版本...
-if exist "DesktopWidget\bin" rmdir /s /q "DesktopWidget\bin"
-if exist "DesktopWidget\obj" rmdir /s /q "DesktopWidget\obj"
+if exist "TaskMatrixApp\bin" rmdir /s /q "TaskMatrixApp\bin"
+if exist "TaskMatrixApp\obj" rmdir /s /q "TaskMatrixApp\obj"
 
 echo.
 echo 2. 恢复依赖包...
-cd DesktopWidget
+cd TaskMatrixApp
 dotnet restore
 if %errorlevel% neq 0 (
     echo ❌ 包恢复失败！
@@ -35,7 +35,7 @@ if %errorlevel% neq 0 (
 
 echo.
 echo 4. 发布应用...
-set DESKTOP_DIR=%USERPROFILE%\Desktop\DesktopWidget
+set DESKTOP_DIR=%USERPROFILE%\Desktop\TaskMatrix
 if not exist "%DESKTOP_DIR%" mkdir "%DESKTOP_DIR%"
 
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "%DESKTOP_DIR%"
@@ -55,7 +55,7 @@ echo.
 echo ===================================
 echo ✅ 部署完成！
 echo 安装位置: %DESKTOP_DIR%
-echo 主程序: %DESKTOP_DIR%\DesktopWidget.exe
+echo 主程序: %DESKTOP_DIR%\TaskMatrix.exe
 echo ===================================
 echo.
 echo 快捷键：
@@ -65,4 +65,4 @@ echo.
 
 echo 按任意键启动应用...
 pause >nul
-start "" "DesktopWidget.exe"
+start "" "TaskMatrix.exe"

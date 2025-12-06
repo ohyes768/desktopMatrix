@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using System.Threading.Tasks;
-using DesktopWidget.Models;
+using TaskMatrixApp.Models;
 using System.Diagnostics;
 
-namespace DesktopWidget.Services
+namespace TaskMatrixApp.Services
 {
     public class DatabaseService
     {

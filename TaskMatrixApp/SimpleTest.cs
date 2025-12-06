@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using DesktopWidget.Models;
+using TaskMatrixApp.Models;
 
-namespace DesktopWidget.Services
+namespace TaskMatrixApp.Services
 {
     // 简单的内存版本，用于测试UI逻辑
     public class SimpleTaskManager
